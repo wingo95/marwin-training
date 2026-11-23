@@ -43,7 +43,7 @@ function renderStats() {
   const wk = iso => { const [y, m, d] = iso.split('-').map(Number); return isoDay(mondayOf(new Date(y, m - 1, d))); };
   for (const [k, e] of Object.entries(logs())) {
     const s = weeks[wk(k.slice(0, 10))] ||= { n: 0, mu: 0, cf: 0, sum: 0, rated: 0, days: {} };
-    s.n++; if (/muscu/i.test(k)) s.mu++; else if (/crossfit|séance [a-d]/i.test(k)) s.cf++;
+    s.n++; const kd = kindOf(k); if (kd === 'muscu') s.mu++; else if (kd === 'crossfit') s.cf++; else if (kd === 'hyrox' || kd === 'prepa') s.hx = (s.hx || 0) + 1;
     if (+e.rating) { s.sum += +e.rating; s.rated++; }
   }
   for (const m of Object.values(meals())) {
@@ -54,7 +54,7 @@ function renderStats() {
   if (!rows.length) { $('stats').innerHTML = '<p class="muted small">Le suivi apparaîtra après ta première séance ou ton premier repas noté.</p>'; return; }
   $('stats').innerHTML = '<table class="stats"><thead><tr><th>Semaine</th><th>Séances</th><th>Diff.</th><th>kcal/j</th><th>Prot./j</th></tr></thead><tbody>' + rows.map(([w, s]) => {
     const ds = Object.values(s.days), avg = f => ds.length ? Math.round(ds.reduce((a, d) => a + d[f], 0) / ds.length) : '—';
-    return `<tr><td>${w.slice(8, 10)}/${w.slice(5, 7)}</td><td>${s.n}${s.n ? ` <span class="muted small">(${s.cf} CF · ${s.mu} M)</span>` : ''}</td><td>${s.rated ? (s.sum / s.rated).toFixed(1).replace('.', ',') : '—'}</td><td>${avg('kcal')}</td><td>${avg('p')}${ds.length ? ' g' : ''}</td></tr>`;
+    return `<tr><td>${w.slice(8, 10)}/${w.slice(5, 7)}</td><td>${s.n}${s.n ? ` <span class="muted small">(${s.cf} CF · ${s.mu} M${s.hx ? ' · ' + s.hx + ' HX' : ''})</span>` : ''}</td><td>${s.rated ? (s.sum / s.rated).toFixed(1).replace('.', ',') : '—'}</td><td>${avg('kcal')}</td><td>${avg('p')}${ds.length ? ' g' : ''}</td></tr>`;
   }).join('') + '</tbody></table>';
 }
 
@@ -136,7 +136,8 @@ $('pickFile').onclick = () => $('importFile').click();
 $('importFile').onchange = async e => { const f = e.target.files[0]; if (f) runImport(await f.text()); e.target.value = ''; };
 $('importText').onclick = () => { runImport($('pasteBox').value); $('pasteBox').value = ''; };
 
-tabHooks.suivi = () => { renderHistory(); cloudState(); coachUi(); backupState(); };
+$('prepaRestart').onclick = () => { if (!confirm('Recommencer la prépa HYROX à la semaine 1 ? Tes séances déjà notées restent dans le journal.')) return; setSetting('prepaStart', isoDay(new Date(Date.now() + 1000))); const t = Object.keys(logs()).filter(k => kindOf(k) === 'prepa' && k.slice(0, 10) >= isoDay()).length; if (t) setSetting('prepaStart', isoDay(new Date(Date.now() + 86400000))); renderPrepaInfo(); };
+tabHooks.suivi = () => { renderHistory(); cloudState(); coachUi(); backupState(); renderPrepaInfo(); };
 
 // Démarrage
 showTab(location.hash.slice(1) || 'seance');

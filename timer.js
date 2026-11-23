@@ -49,7 +49,7 @@ function timerStart(mode, cfg, opts = {}) {
   if (mode) T.mode = mode;
   if (cfg) T.cfg[T.mode] = { ...T.cfg[T.mode], ...cfg };
   const prep = T.mode === 'repos' ? 0 : (opts.prep ?? settings().prep);
-  T.run = { mode: T.mode, cfg: { ...T.cfg[T.mode] }, prep, acc: 0, start: Date.now(), done: false };
+  T.run = { mode: T.mode, cfg: { ...T.cfg[T.mode] }, prep, acc: 0, start: Date.now(), done: false, laps: [] };
   ({ marks } = buildMarks(T.run)); prevT = -prep - 0.001; lastCue = '';
   saveT(); unlockAudio(); keepAwake(true);
   if (prep > 0) say(['prepare']);
@@ -108,9 +108,15 @@ function tick() {
     $('fLab').textContent = v.lab; $('fDig').textContent = v.dig; $('fSub').textContent = v.sub; $('fCue').textContent = s ? lastCue : '';
     $('face').className = 'face ' + v.cls; $('tGo').textContent = v.btn;
     document.querySelectorAll('#modes button').forEach(b => b.classList.toggle('on', b.dataset.m === (s ? s.run.mode : T.mode)));
+    const showLap = !!(s && s.run.mode === 'chrono' && s.run.start && !s.done && !s.prep);
+    $('tLap').hidden = !showLap;
+    const laps = s && s.run.laps || [];
+    const sig = laps.length + ':' + (s ? s.run.mode : '');
+    if ($('laps').dataset.sig !== sig) { $('laps').dataset.sig = sig; $('laps').innerHTML = laps.map((t, i) => `<div><span>Split ${i + 1}</span><b>${mmss(t - (laps[i - 1] || 0))}</b><span class="muted">${mmss(t)}</span></div>`).reverse().join(''); }
   }
   const active = s && !s.done;
-  $('minibar').classList.toggle('on', !!active && document.body.dataset.tab !== 'chrono');
+  const mini = !!active && document.body.dataset.tab !== 'chrono';
+  $('minibar').classList.toggle('on', mini); document.body.classList.toggle('mini', mini);
   if (active) { $('mbDig').textContent = v.dig; $('mbLab').textContent = v.lab + (s.run.start ? '' : ' (pause)'); }
 }
 
@@ -153,6 +159,7 @@ $('modes').addEventListener('click', e => {
 });
 $('tGo').onclick = () => { unlockAudio(); timerToggle(); };
 $('tReset').onclick = timerReset;
+$('tLap').onclick = () => { const s = state(); if (!s || !s.run.start || s.prep) return; (s.run.laps ||= []).push(Math.floor(s.t)); saveT(); beep('short'); tick(); };
 $('mbOpen').onclick = () => goTab('chrono');
 $('minibar').addEventListener('click', e => { if (e.target.id !== 'mbOpen') goTab('chrono'); });
 tabHooks.chrono = () => {

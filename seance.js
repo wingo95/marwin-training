@@ -4,23 +4,52 @@ const DEFAULT_PROFILE = { refs: 'Développé couché : 3 × 8 à 70 kg\nSquat : 
 const coachProfile = () => ({ ...DEFAULT_PROFILE, ...read(COACH_PROFILE, {}) });
 let coachReady = null, pick = { type: null, focus: new Set() };
 
+const TYPE_LOG = { crossfit: 'CrossFit', muscu: 'Muscu', hyrox: 'HYROX', prepa: 'Prépa HYROX' };
+function kindOf(k) {
+  const a = k.slice(13);
+  if (/prépa hyrox/i.test(a)) return 'prepa';
+  if (/hyrox/i.test(a)) return 'hyrox';
+  if (/muscu/i.test(a)) return 'muscu';
+  if (/crossfit|séance [a-d]/i.test(a)) return 'crossfit';
+  if (/padel/i.test(a)) return 'padel';
+  if (/course/i.test(a)) return 'course';
+  return 'autre';
+}
+const KIND_ABBR = { crossfit: 'CF', muscu: 'MU', hyrox: 'HX', prepa: 'PH', padel: 'PA', course: 'CO', autre: '✓' };
 function weekDone() {
-  const mon = isoDay(mondayOf(new Date())), out = { muscu: 0, crossfit: 0, autres: 0 };
+  const mon = isoDay(mondayOf(new Date())), out = { muscu: 0, crossfit: 0, hyrox: 0, prepa: 0, autres: 0 };
   for (const k of Object.keys(logs())) {
     if (k.slice(0, 10) < mon) continue;
-    if (/muscu/i.test(k)) out.muscu++; else if (/crossfit|séance [a-d]/i.test(k)) out.crossfit++; else out.autres++;
+    const t = kindOf(k); if (t in out) out[t]++; else out.autres++;
   }
   return out;
 }
+function prepaStart() { return settings().prepaStart || ''; }
+function prepaIndex() { return Object.keys(logs()).filter(k => kindOf(k) === 'prepa' && k.slice(0, 10) >= prepaStart()).length; }
+function renderPrepaInfo() {
+  const el = $('prepaInfo'); el.hidden = pick.type !== 'prepa';
+  const i = prepaIndex(), done = i >= 36, s = prepaSession(Math.min(i, 35));
+  const kinds = ['Course', 'Force + stations', 'Simulation / metcon'];
+  el.innerHTML = done ? '<b>Programme terminé (36/36).</b> Recommence-le dans Suivi → Réglages, ou continue avec des HYROX metcon.'
+    : `<b>Semaine ${s.prepa.semaine}/12 · phase ${s.prepa.phase}</b><br>Prochaine séance : ${s.prepa.seance}/3 · ${kinds[s.prepa.seance - 1]} (${i} séance${i > 1 ? 's' : ''} faite${i > 1 ? 's' : ''} sur 36)<div class="prog"><i style="width:${i / 36 * 100}%"></i></div>`;
+  if ($('prepaState')) $('prepaState').textContent = done ? 'Programme terminé.' : `Semaine ${s.prepa.semaine}/12, séance ${s.prepa.seance}/3 · ${i}/36 séances faites` + (prepaStart() ? ' depuis le ' + prepaStart().split('-').reverse().join('/') : '') + '.';
+}
 function renderWeek() {
-  const w = weekDone(), slots = [['Muscu', w.muscu >= 1], ['CrossFit 1', w.crossfit >= 1], ['CrossFit 2', w.crossfit >= 2], ['CrossFit 3', w.crossfit >= 3]];
-  $('week').innerHTML = slots.map(([l, d]) => `<div class="slot${d ? ' done' : ''}">${d ? '✓ ' : ''}${l}</div>`).join('');
-  $('weekCount').textContent = Math.min(w.muscu, 1) + Math.min(w.crossfit, 3) + ' / 4' + (w.autres ? ' · ' + w.autres + ' autre' + (w.autres > 1 ? 's' : '') : '');
-  if (!pick.type) setType(w.crossfit < 3 ? 'crossfit' : 'muscu');
+  const mon = mondayOf(new Date()), all = Object.keys(logs()), names = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  let n = 0;
+  $('week').innerHTML = names.map((nm, d) => {
+    const day = new Date(mon); day.setDate(mon.getDate() + d);
+    const iso = isoDay(day), ks = all.filter(k => k.slice(0, 10) === iso); n += ks.length;
+    return `<div class="day${ks.length ? ' done' : ''}${iso === isoDay() ? ' today' : ''}"><b>${nm}</b>${ks.map(k => KIND_ABBR[kindOf(k)]).join(' ')}</div>`;
+  }).join('');
+  $('weekCount').textContent = n + ' séance' + (n > 1 ? 's' : '');
+  if (!pick.type) setType(settings().lastType || 'crossfit');
+  renderPrepaInfo();
 }
 function setType(t) {
-  pick.type = t;
+  pick.type = t; setSetting('lastType', t);
   document.querySelectorAll('.type').forEach(b => b.classList.toggle('on', b.dataset.type === t));
+  renderPrepaInfo();
 }
 document.querySelectorAll('.type').forEach(b => b.onclick = () => setType(b.dataset.type));
 $('focus').addEventListener('click', e => {
@@ -37,7 +66,13 @@ async function checkCoach() {
 }
 function templateFor(type) {
   if (type === 'muscu') return TEMPLATES.muscu;
+  if (type === 'prepa') return prepaSession(Math.min(prepaIndex(), 35));
+  if (type === 'hyrox') return TEMPLATES.hyrox[Object.keys(logs()).filter(k => kindOf(k) === 'hyrox').length % TEMPLATES.hyrox.length];
   return TEMPLATES.crossfit[weekDone().crossfit % 3];
+}
+function planSummary(p) {
+  return p.titre + ' — ' + (p.objectif || '') + '\n' + (p.exercices || []).map(x => '- ' + x.nom + ' : ' + x.series + ' × ' + x.reps + ' à ' + x.charge + (x.repos_s ? ', repos ' + x.repos_s + ' s' : '')).join('\n') +
+    (p.wod ? '\nWOD ' + p.wod.format + ' ' + (p.wod.duree_min || '') + ' min : ' + p.wod.description + ' ' + p.wod.mouvements.map(m => m.reps + ' ' + m.nom + ' (' + m.charge + ')').join(', ') : '');
 }
 $('propose').onclick = async () => {
   const type = pick.type || 'crossfit', btn = $('propose');
@@ -48,12 +83,14 @@ $('propose').onclick = async () => {
     if (coachReady) {
       $('seanceMsg').textContent = 'Claude prépare ta séance… (20 à 40 s)';
       const p = coachProfile();
-      const r = await callScript({ action: 'coach', type, focus: [...pick.focus], ask: $('ask').value.trim(), duration: Number($('dur').value), refs: p.refs, notes: p.notes, week: weekDone(), today: isoDay() });
-      if (r.ok && r.seance) { seance = { ...r.seance, type }; source = 'coach'; }
+      const plan = type === 'prepa' ? templateFor('prepa') : null;
+      const r = await callScript({ action: 'coach', type, focus: [...pick.focus], ask: $('ask').value.trim(), duration: Number($('dur').value), refs: p.refs, notes: p.notes, week: weekDone(), today: isoDay(), ...(plan ? { prepa: plan.prepa, plan: planSummary(plan) } : {}) });
+      if (r.ok && r.seance) { seance = { ...r.seance, type, ...(plan ? { prepa: plan.prepa } : {}) }; source = 'coach'; }
       else note = r.error === 'need_key' ? 'Coach IA sans clé : séance type proposée.' : 'Coach IA indisponible (' + (r.error || 'erreur') + ') : séance type proposée.';
     } else note = cloud() ? 'Coach IA pas encore activé : séance type proposée.' : 'Cloud non connecté : séance type proposée.';
   } catch (err) { note = 'Coach IA injoignable (' + err.message + ') : séance type proposée.'; }
   if (!seance) seance = JSON.parse(JSON.stringify(templateFor(type)));
+  if (type === 'prepa' && !prepaStart()) setSetting('prepaStart', isoDay());
   write(COACH, { seance, source, created: Date.now(), day: isoDay(), done: {} });
   renderSeance();
   $('seanceMsg').className = 'status ' + (source === 'coach' ? 'ok' : 'warn');
@@ -109,7 +146,9 @@ $('seanceOut').addEventListener('click', e => {
     const saved = read(COACH, null), s = saved.seance, done = saved.done || {};
     const lines = (s.exercices || []).map((x, i) => (done[i] ? '✓ ' : '') + x.nom + ' : ' + x.series + ' × ' + x.reps + ' à ' + x.charge);
     if (s.wod) lines.push('WOD ' + (WOD_LABEL[(s.wod.format || '').toUpperCase()] || '') + ' : score = ');
-    openLog({ type: s.type === 'muscu' ? 'Muscu' : 'CrossFit', text: s.titre + '\n' + lines.join('\n') });
+    const laps = T.run && T.run.mode === 'chrono' && T.run.laps && T.run.laps.length ? T.run.laps : null;
+    if (laps) lines.push('Splits : ' + laps.map((t, i) => (i + 1) + ') ' + mmss(t - (laps[i - 1] || 0))).join(', ') + ' · total ' + mmss(laps[laps.length - 1]));
+    openLog({ type: TYPE_LOG[s.type] || 'CrossFit', text: s.titre + '\n' + lines.join('\n') });
   }
 });
 $('seanceOut').addEventListener('change', e => {
