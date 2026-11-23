@@ -1,29 +1,18 @@
-// Cache d'abord (démarrage instantané même sans réseau à la salle), mise à jour en arrière-plan.
-const cacheName = 'marwin-offline-v4';
-const assets = ['./','./index.html','./app.js','./training.js','./moves.js','./focus.js','./intervals.js','./sync.js','./muscles.js','./coach.js','./manifest.webmanifest','./icon.png'];
-self.addEventListener('install', event => event.waitUntil((async () => {
-  const cache = await caches.open(cacheName);
-  await cache.addAll(assets);
-  await self.skipWaiting();
-})()));
-self.addEventListener('activate', event => event.waitUntil((async () => {
-  for (const key of await caches.keys()) if (key !== cacheName) await caches.delete(key);
-  await self.clients.claim();
-})()));
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  if (event.request.method !== 'GET' || url.origin !== self.location.origin) return;
-  let asset = assets.find(path => new URL(path,self.registration.scope).pathname === url.pathname);
-  if (!asset && event.request.mode === 'navigate') asset = './';
+// Hors ligne : cache d'abord (démarrage instantané à la salle), mise à jour en arrière-plan.
+const cacheName = 'marwin-v5';
+const assets = ["./", "./index.html", "./core.js", "./audio.js", "./muscles.js", "./timer.js", "./sync.js", "./templates.js", "./seance.js", "./repas.js", "./suivi.js", "./manifest.webmanifest", "./icon.png", "./voix.json"];
+self.addEventListener('install', e => e.waitUntil((async () => { const c = await caches.open(cacheName); await c.addAll(assets); await self.skipWaiting(); })()));
+self.addEventListener('activate', e => e.waitUntil((async () => { for (const k of await caches.keys()) if (k !== cacheName) await caches.delete(k); await self.clients.claim(); })()));
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+  if (e.request.method !== 'GET' || url.origin !== self.location.origin) return;
+  let asset = assets.find(p => new URL(p, self.registration.scope).pathname === url.pathname);
+  if (!asset && e.request.mode === 'navigate') asset = './';
   if (!asset) return;
-  event.respondWith((async () => {
-    const cache = await caches.open(cacheName);
-    const cached = await cache.match(asset);
-    const network = fetch(event.request).then(res => {
-      if (res.ok) cache.put(asset, res.clone());
-      return res;
-    });
-    if (cached) { event.waitUntil(network.catch(()=>{})); return cached; }
-    return network;
+  e.respondWith((async () => {
+    const c = await caches.open(cacheName), hit = await c.match(asset);
+    const net = fetch(e.request).then(r => { if (r.ok) c.put(asset, r.clone()); return r; });
+    if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
+    return net;
   })());
 });

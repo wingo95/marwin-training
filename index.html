@@ -1,53 +1,205 @@
-<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#192b29"><link rel="apple-touch-icon" href="icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Training"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>Marwin Training</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#142722">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Training">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<title>Marwin Training</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f6f4;color:#192b29;font:16px/1.48 "DM Sans",system-ui,sans-serif}header{background:#192b29;color:white;padding:calc(18px + env(safe-area-inset-top)) max(5vw,calc((100vw - 1080px)/2),env(safe-area-inset-right)) 18px max(5vw,calc((100vw - 1080px)/2),env(safe-area-inset-left));display:flex;align-items:center;gap:10px;font-weight:800;white-space:nowrap}header i{display:inline-block;width:28px;height:20px;background:repeating-linear-gradient(110deg,#c1fa70 0 6px,transparent 6px 10px)}main{max-width:1120px;margin:auto;padding:26px 20px 40px}h1{font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:-.065em;line-height:1.05;margin:8px 0 12px}p{margin:6px 0 18px}button,select,input{font:inherit}button,select{cursor:pointer}button{padding:9px 15px;border:1px solid #b8c5bf;border-radius:9px;background:white;color:inherit;font-weight:650}button[aria-pressed=true]{background:#203c34;color:white;border-color:#203c34}.grid{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:18px;margin-top:18px}.card,aside{background:white;border-radius:16px;border:1px solid #d6ded8;padding:22px}aside{align-self:start;background:#192b29;color:white}h2{letter-spacing:-.04em;margin:0 0 14px;font-size:1.45rem}.tabs{display:flex;flex-wrap:wrap;gap:6px}.tabs button{flex:1}.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.week{padding:9px;border-radius:9px;background:white;color:#192b29;border:1px solid #b8c5bf}.meta{color:#51635b}table{border-collapse:collapse;width:100%;text-align:left}th,td{padding:12px 5px;border-bottom:1px solid #dde4df;vertical-align:top}th{color:#52665d;font-size:.86rem}td:first-child{font-weight:700;width:26%}td small{display:block;font-weight:500;color:#53655c}.clock{text-align:center;font:700 clamp(3rem,6vw,4.4rem)/1.35 ui-monospace,monospace;letter-spacing:-.08em;margin:20px 0}.ctrl{display:flex;gap:6px}.ctrl button{flex:1}.go{background:#c1fa70;border-color:#c1fa70;color:#192b29}aside button{color:#192b29}aside .tabs button[aria-pressed=true]{background:#d6e5dd;color:#192b29}aside .tabs button[aria-pressed=false]{background:transparent;color:white}.set{margin-top:15px;display:flex;align-items:center;gap:10px}.set input{width:78px;padding:7px;border:0;border-radius:6px}.notice{font-size:.92rem;color:#c1fa70;margin-top:10px}.tip{margin:16px 0 0;color:#40564b}.jump{color:#305845;font-weight:650}summary{cursor:pointer;font-weight:bold}details{margin-top:20px}.caption{font-weight:650}.card .tabs{margin-bottom:20px}@media(max-width:770px){.grid{grid-template-columns:1fr}main{padding:18px 12px}.card,aside{padding:16px}td:first-child{width:31%}.top{align-items:baseline}.clock{font-size:4rem}}[hidden]{display:none}
-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}nav a{color:#204e3c;padding:6px 10px;background:#e1eae2;border-radius:7px;text-decoration:none;font-weight:650}.extra{margin-top:16px;scroll-margin-top:10px}.fields{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}.fields label{display:grid;gap:4px}.fields input,.fields select,textarea,aside select{padding:8px;border:1px solid #98ada2;border-radius:6px;font:inherit}textarea{width:100%}.entry{border-top:1px solid #c8d4cc;padding:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}aside details button{margin:8px 4px 0 0}.tip{line-height:1.5}.extra table td:first-child{width:auto}#big[open]{position:fixed;inset:0;width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#142722;color:white}#face{height:100%;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}#digits{font:700 min(24vw,46vh)/1.1 monospace;letter-spacing:-.08em}#big button{color:#193328}#cue{color:#c1fa70;min-height:1.6em;font-weight:700}#enlarge{margin-bottom:12px}.presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}.presets button{padding:8px 6px;font-size:.9rem}aside .fields input{width:100%;border:0}aside .fields label{flex:1 1 40%}.clock.small{font-size:1.5rem;letter-spacing:-.02em;min-height:1.4em;margin:8px 0}.wide{width:100%;margin-top:8px}#bigLabel{font-size:1.4rem;font-weight:800;letter-spacing:.02em}#bigSub{opacity:.85;margin:4px 0 0}#big.work{background:#c1fa70;color:#142722}#big.work #cue{color:#142722}#big.prep{background:#f0a83c;color:#142722}#big.prep #cue{color:#142722}#big.rest{background:#142722}#big.done{background:#203c34}.stats{margin:12px 0 4px}.stats table td:first-child{width:auto;font-weight:650}.cloud{font-weight:650}.cloud.ok{color:#305845}.cloud.warn{color:#9b2c1f}#cloudLink{width:100%;padding:8px;border:1px solid #98ada2;border-radius:6px;font:inherit}.entry-actions{margin-top:6px;display:flex;gap:6px;white-space:normal}.entry-actions button{padding:5px 10px;font-size:.88rem}.danger{color:#9b2c1f;border-color:#e0b8b0}.transfer .row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.transfer h3{margin:18px 0 4px;font-size:1.05rem}#backupState.late{color:#9b2c1f;font-weight:700}#syncMsg{font-weight:650;color:#305845;white-space:pre-wrap}input[type=file]{display:none}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.chips button{padding:6px 10px;font-size:.88rem;border-radius:999px}
-#coachAsk,.coachset textarea,.coachset input{width:100%;box-sizing:border-box;padding:8px;border:1px solid #98ada2;border-radius:6px;font:inherit}
-.coachrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}.coachrow label{display:flex;gap:6px;align-items:center}
-.coachset label{display:block;margin:10px 0 4px;font-weight:650}
-.seance-head h3{margin:14px 0 2px}.warm{background:#eef3f0;border-radius:8px;padding:8px 10px}
-.ex{border:1px solid #d5dfda;border-radius:10px;padding:10px;margin:10px 0;background:#fff}.ex.superset{border-left:4px solid #e4572e}.ex.done{opacity:.55}
-.exhead{display:flex;gap:10px;align-items:flex-start}.num{background:#192b29;color:#c1fa70;border-radius:50%;min-width:28px;height:28px;display:grid;place-items:center;font-weight:800}
-.tag{display:inline-block;margin-left:6px;font-size:.75rem;background:#fde6dd;color:#9b2c1f;border-radius:999px;padding:1px 8px;vertical-align:middle}
-.dose{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;font-size:.92rem}.dose span{background:#eef3f0;border-radius:6px;padding:2px 7px}.dose .load{background:#192b29;color:#c1fa70;font-weight:750}
-.exbody{display:grid;grid-template-columns:minmax(150px,46%) 1fr;gap:10px;align-items:center;margin-top:6px}.musclemap{width:100%;height:auto}
-.legend{font-size:.88rem;margin:0 0 6px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.dot.p{background:#e4572e}.dot.s{background:#f5b49c}.tipx{font-size:.9rem;margin:0}
-.exact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}.restbtn.running{background:#c1fa70;font-weight:750}.demo{font-weight:650}.check{margin-left:auto}
-#coachLog{width:100%;margin-top:8px}</style>
-<header><i></i> MARWIN TRAINING</header><main><h1>Mon entraînement</h1><p class="meta">Préparation CrossFit · Bloc de reprise · 4 semaines</p><nav><a href="#programme">Programme</a><a href="#coach">Coach IA</a><a href="#timer">Chronos</a><a href="#journal">Journal</a><a href="#menu">Repas</a></nav><div class="top" id="programme"><label>Semaine <select id="week" class="week" aria-label="Semaine"><option>1</option><option>2</option><option>3</option><option>4</option></select></label><a class="jump" href="#timer">Accéder au chrono</a></div><div class="grid"><section class="card"><div class="tabs" id="sessions"></div><h2 id="title"></h2><p class="meta" id="duration"></p><table><thead><tr><th>Bloc</th><th>Exercices, charges et repos</th></tr></thead><tbody id="rows"></tbody></table><section aria-label="Guide des mouvements"><h3>Mouvements et muscles travaillés</h3><div id="moves"></div></section><p id="tip" class="tip"></p><details><summary>Progression sur 4 semaines</summary><table><thead><tr><th>Sem.</th><th>Squat</th><th>Couché</th></tr></thead><tbody id="progress"></tbody></table></details></section>
-<aside id="timer"><h2>Temps de séance</h2><button id="enlarge">Plein écran</button><div class="tabs"><button id="down">Minuteur</button><button id="up">Chrono</button></div><label class="set" id="setting">Durée (min) <input id="minutes" type="number" min="0.25" max="180" step="0.25" value="10" inputmode="decimal"></label><div class="clock" id="display">10:00</div><div class="ctrl"><button class="go" id="start">Démarrer</button><button id="reset">Remise à zéro</button></div><div role="status" class="notice" id="status"></div><hr><h2>Repos entre séries</h2><label>Durée <select id="rest"></select></label><button id="restGo">Lancer le repos</button><p class="clock" id="restClock"></p>
-<hr><h2>Intervalles · Tabata</h2><div class="presets"><button type="button" data-preset="20,10,8">Tabata 20/10 × 8</button><button type="button" data-preset="40,20,6">40/20 × 6</button><button type="button" data-preset="30,30,10">30/30 × 10</button><button type="button" data-preset="45,15,8">45/15 × 8</button></div><div class="fields"><label>Effort (s)<input id="eff" type="number" min="1" max="3600" value="20" inputmode="numeric"></label><label>Repos (s)<input id="off" type="number" min="1" max="3600" value="10" inputmode="numeric"></label><label>Tours<input id="rounds" type="number" min="1" max="99" value="8" inputmode="numeric"></label><label>Préparation (s)<input id="prep" type="number" min="0" max="60" value="10" inputmode="numeric"></label></div><p class="clock small" id="phase"></p><div class="ctrl"><button class="go" id="intGo">Démarrer</button><button id="intReset">Réinitialiser</button></div><button id="intBig" class="wide">Plein écran</button><p class="notice">Annonces vocales : préparation 3-2-1, chaque tour, repos, mi-temps, 10 dernières secondes et fin.</p></aside></div><section id="coach" class="card extra"><h2>Coach IA</h2><p class="cloud" id="coachState"></p>
-<p class="tip">Dis ce que tu veux travailler : Claude prépare la séance du jour avec charges, repos, muscles travaillés et vidéo de démo.</p>
-<div class="chips"><button type="button" data-ask="Prise de masse : pecs, dos, biceps, triceps">Masse · haut du corps</button><button type="button" data-ask="Prise de masse : jambes et fessiers, en ménageant la cheville">Masse · jambes</button><button type="button" data-ask="Prise de masse : épaules et bras">Masse · épaules, bras</button><button type="button" data-ask="Full body force + hypertrophie">Full body</button><button type="button" data-ask="WOD CrossFit d'environ 20 minutes après un renforcement">WOD CrossFit</button><button type="button" data-ask="Séance légère de récupération et mobilité après le padel">Récup · mobilité</button></div>
-<textarea id="coachAsk" rows="2" placeholder="Ex. aujourd’hui prise de masse : pecs, dos, biceps, triceps"></textarea>
-<div class="row coachrow"><label>Durée <select id="coachDur"><option value="45">45 min</option><option value="60">60 min</option><option value="75" selected>75 min</option><option value="90">90 min</option></select></label><button type="button" class="go" id="coachGo">Générer ma séance</button></div>
-<p id="coachMsg" role="status"></p>
-<div id="coachOut"></div>
-<details class="coachset"><summary>Réglages du coach</summary>
-<label>Mes charges de référence<textarea id="coachRefs" rows="4"></textarea></label>
-<label>Notes (blessures, sports, matériel)<textarea id="coachNotes" rows="3"></textarea></label>
-<p class="tip">Le coach lit aussi tes 15 dernières séances du Google Sheet pour ajuster les charges et la fatigue.</p>
-<div id="coachKeyBox"><label>Clé API Anthropic<input id="coachKey" type="password" autocomplete="off" placeholder="sk-ant-…"></label><div class="row"><button type="button" id="coachKeySave">Enregistrer la clé</button></div><p class="tip">Envoyée une seule fois à ton script Google, jamais stockée dans l’app ni sur GitHub. Crée-la sur console.anthropic.com → API Keys.</p><p id="coachKeyMsg" role="status"></p></div>
-<div class="row"><button type="button" id="coachKeyShow">Changer la clé API</button><button type="button" id="coachReset">Revenir à la séance d’exemple</button></div>
-</details></section>
-<section id="journal" class="card extra"><h2>Journal quotidien</h2><p class="cloud" id="cloudState"></p><form id="logForm"><div class="fields"><label>Date<input required type="date" id="day"></label><label>Activité<select id="activity"><option>Séance A</option><option>Séance B</option><option>Séance C</option><option>Séance D</option><option>Padel 1</option><option>Padel 2</option><option>Course</option></select></label><label>Difficulté sur 10<select id="rating" required></select></label></div><label>Résultats<textarea required id="result" rows="2" placeholder="Ex. squat 3 × 8 à 80 kg, WOD 4 tours, bonnes sensations"></textarea></label><button>Enregistrer</button> <span id="feedback" role="status"></span></form><p class="tip">Historique sur cet appareil. Touche « Modifier » sur une entrée, ou choisis une date et une activité, pour changer leur résultat.</p>
-<details class="transfer" id="transfer"><summary>Cloud, sauvegarde et transfert du journal</summary>
-<p class="meta" id="backupState"></p>
-<h3>Sauvegarde cloud (Google Sheets)</h3>
-<p class="tip">Chaque séance est envoyée dans ton Google Sheet : suivi sur tous tes appareils, même sans réseau (envoi dès le retour de la connexion).</p>
-<div id="cloudOff"><input id="cloudLink" type="url" placeholder="Colle ici ton lien de connexion (https://script.google.com/…)" autocomplete="off"><div class="row"><button type="button" id="cloudConnect">Connecter</button></div></div>
-<div id="cloudOn" hidden><div class="row"><button type="button" id="cloudSync">Synchroniser maintenant</button><button type="button" id="cloudOff2" class="danger">Déconnecter cet appareil</button></div></div>
-<h3>Sauvegarder / envoyer vers un autre appareil</h3>
-<div class="row"><button type="button" id="exportFile">Exporter un fichier</button><button type="button" id="copyText">Copier en texte</button></div>
-<p class="tip">Le fichier peut être enregistré dans Fichiers ou iCloud Drive, ou envoyé par AirDrop, mail ou message.</p>
-<h3>Importer un fichier exporté</h3>
-<div class="row"><label><button type="button" id="pickFile">Choisir un fichier</button><input type="file" id="importFile" accept=".json,application/json,text/plain"></label></div>
-<h3>Récupérer l’ancien journal (version ChatGPT)</h3>
-<p class="tip">Dans l’ancienne app, sélectionne tout l’historique affiché sous le formulaire, copie-le, puis colle-le ici. Chaque entrée commence par « date / activité · Difficulté x/10 ».</p>
-<textarea id="pasteBox" rows="5" placeholder="2026-11-17 / Séance A · Difficulté 7/10&#10;squat 3 × 8 à 87,5 kg, bonnes sensations"></textarea>
-<div class="row"><button type="button" id="importText">Importer le texte collé</button></div>
-<p id="syncMsg" role="status"></p>
-</details>
-<div class="stats" id="stats"></div><div id="history"></div></section>
-<section id="menu" class="card extra"><h2>Planning alimentaire</h2><p>Exemple pour une semaine avec padel. Ajuste les portions à ta faim, à la durée des matchs et à ta récupération.</p><label>Jour <select id="mealDay" class="week"></select></label><table><tbody id="meals"></tbody></table><p class="tip">Entre deux matchs rapprochés, privilégie une collation facile à digérer et bois régulièrement. Si tu as plusieurs heures, prends un repas avec féculents et protéines.</p></section>
-<details class="extra"><summary>Ajouter à l’écran d’accueil sur iPhone</summary><p>Ouvre cette page dans Safari. Dans le menu Partager, choisis « Sur l’écran d’accueil », active « Ouvrir comme app web » si proposé, puis touche « Ajouter ». Sur iPhone, l’icône a son propre stockage, séparé de Safari : importe ton journal et saisis tes résultats depuis l’icône, pas depuis Safari.</p></details><dialog id="big"><div id="face"><p id="bigLabel"></p><strong id="digits"></strong><p id="bigSub"></p><p id="cue" role="status"></p><div><button id="bigGo">Démarrer</button> <button id="closeBig">Quitter</button></div></div></dialog></main><script src="moves.js"></script><script src="app.js"></script><script src="training.js"></script><script src="focus.js"></script><script src="intervals.js"></script><script src="sync.js"></script><script src="muscles.js"></script><script src="coach.js"></script></html>
+:root{--ink:#142722;--lime:#c1fa70;--bg:#f2f4f1;--card:#fff;--line:#d9e1dc;--muted:#5d6f66;--red:#e4572e;--warn:#9b2c1f;--ok:#2f6b4b}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer}
+button:active{transform:scale(.98)}button:disabled{opacity:.5}
+.go{background:var(--lime);border-color:var(--lime);color:var(--ink);font-weight:800}
+.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.danger{color:var(--warn);border-color:#ecc3b8}
+input,select,textarea{border:1px solid #b9c7bf;border-radius:10px;padding:10px;background:#fff;width:100%}
+textarea{resize:vertical}
+header{background:var(--ink);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 18px 12px}
+header h1{margin:0;font-size:1.15rem;letter-spacing:-.01em}header p{margin:2px 0 0;color:#b8c9bf;font-size:.85rem}
+main{padding:14px 14px calc(96px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto}
+.tab{display:none}.tab.on{display:block}
+h2{font-size:1.25rem;margin:4px 0 10px;letter-spacing:-.01em}h3{font-size:1.05rem;margin:16px 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
+.muted{color:var(--muted)}.small{font-size:.88rem}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.grow{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border-radius:999px;padding:7px 12px;font-size:.92rem}.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.status{font-weight:650;font-size:.9rem}.status.ok{color:var(--ok)}.status.warn{color:var(--warn)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:20}
+nav.tabs a{text-decoration:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;font-size:.72rem;font-weight:650;gap:2px;padding:4px 0}
+nav.tabs a svg{width:24px;height:24px}nav.tabs a.on{color:var(--ink)}nav.tabs a.on svg{stroke:var(--ink)}
+#minibar{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));background:var(--ink);color:#fff;border-radius:14px;padding:10px 14px;display:none;align-items:center;gap:10px;z-index:19;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#minibar.on{display:flex}#minibar b{font-variant-numeric:tabular-nums;font-size:1.25rem}#minibar .grow{font-size:.9rem;color:#cfe0d6}#minibar button{padding:6px 10px;background:var(--lime);border:0}
+/* Semaine */
+.week{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}.slot{border:1px dashed #b9c7bf;border-radius:12px;padding:8px 4px;text-align:center;font-size:.8rem;color:var(--muted)}.slot.done{border:1px solid var(--ink);background:var(--ink);color:var(--lime);font-weight:750}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.type{padding:14px 10px;border-radius:14px;text-align:left}.type b{display:block;font-size:1rem}.type span{font-size:.8rem;color:var(--muted);font-weight:500}.type.on{background:var(--ink);color:#fff;border-color:var(--ink)}.type.on span{color:#cfe0d6}
+/* Séance */
+.ex{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fff}.ex.superset{border-left:4px solid var(--red)}.ex.done{opacity:.5}
+.exhead{display:flex;gap:10px;align-items:flex-start}.num{background:var(--ink);color:var(--lime);border-radius:50%;min-width:28px;height:28px;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.tag{display:inline-block;margin-left:6px;font-size:.72rem;background:#fde6dd;color:var(--warn);border-radius:999px;padding:1px 8px;vertical-align:middle}
+.dose{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;font-size:.9rem}.dose span{background:#eef3f0;border-radius:6px;padding:2px 7px}.dose .load{background:var(--ink);color:var(--lime);font-weight:750}
+.exbody{display:grid;grid-template-columns:minmax(140px,44%) 1fr;gap:10px;align-items:center;margin-top:6px}.musclemap{width:100%;height:auto}
+.legend{font-size:.86rem;margin:0 0 6px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.dot.p{background:var(--red)}.dot.s{background:#f5b49c}.tipx{font-size:.9rem;margin:0}
+.exact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}.exact button{padding:7px 12px}.demo{font-weight:650;color:var(--ink)}.check{margin-left:auto;display:flex;gap:6px;align-items:center}.check input{width:auto}
+.warm{background:#eef3f0;border-radius:12px;padding:10px 12px;margin:8px 0}
+.wod{background:var(--ink);color:#fff;border-radius:16px;padding:14px;margin:12px 0}.wod h3{margin:0 0 4px;color:var(--lime)}.wod li{margin:4px 0}.wod .go{width:100%;margin-top:8px}
+/* Chrono */
+.modes{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:#e3e9e5;border-radius:12px;padding:4px}.modes button{border:0;background:transparent;padding:8px 2px;font-size:.82rem;border-radius:9px}.modes button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.face{border-radius:22px;background:var(--ink);color:#fff;text-align:center;padding:18px 12px 20px;margin:12px 0;transition:background .3s}
+.face.work{background:var(--lime);color:var(--ink)}.face.prep{background:#f0a83c;color:var(--ink)}.face.rest{background:#24403a}.face.done{background:#203c34}
+.face .lab{font-weight:800;font-size:1.15rem;letter-spacing:.02em;min-height:1.5em}.face .dig{font-size:min(28vw,150px);font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;margin:6px 0}.face .sub{opacity:.85;min-height:1.4em}.face .cue{font-weight:800;min-height:1.4em;margin-top:4px}
+.ctrl{display:grid;grid-template-columns:2fr 1fr;gap:8px}.ctrl button{padding:16px;font-size:1.1rem;border-radius:16px}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:10px}.cfg label{font-size:.85rem;color:var(--muted);font-weight:650}.cfg input,.cfg select{margin-top:4px;font-size:1.05rem;text-align:center}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.presets button{padding:7px 11px;font-size:.88rem}
+/* Repas */
+.totals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.tot{background:#eef3f0;border-radius:12px;padding:10px}.tot b{font-size:1.35rem;display:block;font-variant-numeric:tabular-nums}.tot span{font-size:.8rem;color:var(--muted)}
+.bar{height:6px;background:#dfe6e1;border-radius:9px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--ink)}.bar i.over{background:var(--red)}
+.meal{border-top:1px solid var(--line);padding:10px 0}.meal:first-child{border-top:0}.meal table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:6px}.meal td,.meal th{padding:3px 4px;text-align:right;border-bottom:1px solid #eef1ee}.meal td:first-child,.meal th:first-child{text-align:left}
+.ig{display:inline-block;border-radius:6px;padding:0 6px;font-size:.78rem;font-weight:700}.ig.bas{background:#dff3e4;color:#22663b}.ig.moyen{background:#fff1cc;color:#7a5a00}.ig.eleve{background:#fde1da;color:var(--warn)}
+.daynav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.daynav button{padding:6px 12px}
+/* Suivi */
+.entry{border-top:1px solid var(--line);padding:10px 0;white-space:pre-wrap;font-size:.92rem}.entry:first-child{border-top:0}.entry b{white-space:normal}
+table.stats{width:100%;border-collapse:collapse;font-size:.9rem}table.stats td,table.stats th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
+details.set{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px}details.set summary{font-weight:750;cursor:pointer}details.set label{display:block;margin:10px 0 4px;font-weight:650;font-size:.9rem}
+.sheet{position:fixed;inset:0;background:rgba(10,20,16,.45);display:none;align-items:flex-end;z-index:30}.sheet.on{display:flex}.sheet>div{background:#fff;width:100%;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.rate{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:8px 0}.rate button{padding:8px 0;border-radius:8px}.rate button.on{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<header><h1 id="hTitle">Séance</h1><p id="hSub">Marwin Training</p></header>
+<main>
+
+<!-- ============ SÉANCE ============ -->
+<section class="tab" id="t-seance">
+  <div class="card">
+    <div class="row"><b class="grow">Cette semaine</b><span class="small muted" id="weekCount"></span></div>
+    <div class="week" id="week"></div>
+  </div>
+  <div class="card">
+    <h2>Qu’est-ce que tu veux travailler aujourd’hui ?</h2>
+    <div class="types">
+      <button class="type" data-type="crossfit"><b>CrossFit</b><span>Full body + WOD</span></button>
+      <button class="type" data-type="muscu"><b>Muscu</b><span>Sans cardio</span></button>
+    </div>
+    <div class="chips" id="focus">
+      <button class="chip" data-f="pecs">Pecs</button><button class="chip" data-f="dos">Dos</button><button class="chip" data-f="épaules">Épaules</button><button class="chip" data-f="bras">Bras</button><button class="chip" data-f="jambes">Jambes</button><button class="chip" data-f="abdos">Abdos</button>
+    </div>
+    <textarea id="ask" rows="2" placeholder="Précision (facultatif) : ex. épaule un peu raide, pas de rameur dispo…" style="margin-top:10px"></textarea>
+    <div class="row" style="margin-top:10px"><select id="dur" style="width:auto"><option value="45">45 min</option><option value="60" selected>60 min</option><option value="75">75 min</option></select><button class="go grow" id="propose">Proposer ma séance</button></div>
+    <p class="status" id="seanceMsg" role="status"></p>
+  </div>
+  <div id="seanceOut"></div>
+</section>
+
+<!-- ============ CHRONO ============ -->
+<section class="tab" id="t-chrono">
+  <div class="modes" id="modes">
+    <button data-m="minuteur">AMRAP</button><button data-m="chrono">For time</button><button data-m="emom">EMOM</button><button data-m="tabata">Tabata</button><button data-m="repos">Repos</button>
+  </div>
+  <div class="face" id="face"><div class="lab" id="fLab"></div><div class="dig" id="fDig">00:00</div><div class="sub" id="fSub"></div><div class="cue" id="fCue" role="status"></div></div>
+  <div class="ctrl"><button class="go" id="tGo">Démarrer</button><button id="tReset">Remise à zéro</button></div>
+  <div class="card" style="margin-top:12px" id="cfgCard">
+    <div class="cfg" id="cfg"></div>
+    <div class="presets" id="presets"></div>
+  </div>
+  <p class="small muted" id="soundHint"></p>
+</section>
+
+<!-- ============ REPAS ============ -->
+<section class="tab" id="t-repas">
+  <div class="card">
+    <div class="daynav"><button id="dPrev">◀</button><b id="dLabel"></b><button id="dNext">▶</button></div>
+    <div class="totals" id="totals"></div>
+  </div>
+  <div class="card">
+    <h2>Qu’as-tu mangé ?</h2>
+    <div class="chips" id="mealType"><button class="chip" data-m="Petit-déjeuner">Petit-déj</button><button class="chip" data-m="Déjeuner">Déjeuner</button><button class="chip" data-m="Collation">Collation</button><button class="chip" data-m="Dîner">Dîner</button></div>
+    <textarea id="mealText" rows="3" style="margin-top:10px" placeholder="Ex. 3 œufs, 2 tranches de pain complet, 1 banane, café sans sucre"></textarea>
+    <button class="go" id="mealGo" style="width:100%;margin-top:10px">Calculer calories et index glycémique</button>
+    <p class="status" id="mealMsg" role="status"></p>
+  </div>
+  <div class="card" id="mealList"></div>
+</section>
+
+<!-- ============ SUIVI ============ -->
+<section class="tab" id="t-suivi">
+  <p class="status" id="cloudState"></p>
+  <div class="card"><h2>Suivi par semaine</h2><div id="stats"></div></div>
+  <div class="card">
+    <div class="row"><h2 class="grow" style="margin:0">Journal</h2><button id="addEntry">+ Ajouter</button></div>
+    <div id="history"></div>
+  </div>
+  <h2 style="margin-top:18px">Réglages</h2>
+  <details class="set" id="setSound"><summary>Annonces sonores</summary>
+    <label>Voix des annonces</label>
+    <select id="voiceMode"><option value="clips">Voix intégrée — se mixe avec ta musique</option><option value="iphone">Voix de l’iPhone — baisse la musique 1 à 2 s</option><option value="bips">Bips seulement</option></select>
+    <div class="row" style="margin-top:8px"><button id="testSound">Tester le son</button></div>
+    <p class="small muted">La voix intégrée et les bips se mélangent à YouTube Music sans le couper, mais iOS les rend muets si l’iPhone est en mode silencieux : désactive-le pendant la séance. Voix : Piper « fr-siwis » (licence CC BY 4.0, base SIWIS).</p>
+    <label>Préparation avant le départ</label><select id="prepSec"><option value="0">Aucune</option><option value="5">5 s</option><option value="10" selected>10 s</option></select>
+  </details>
+  <details class="set"><summary>Objectifs nutrition</summary>
+    <label>Calories par jour (kcal)</label><input id="goalKcal" type="number" inputmode="numeric">
+    <label>Protéines par jour (g)</label><input id="goalProt" type="number" inputmode="numeric">
+  </details>
+  <details class="set" id="setCloud"><summary>Cloud Google Sheets</summary>
+    <div id="cloudOff"><label>Lien de connexion</label><input id="cloudLink" type="url" placeholder="https://script.google.com/macros/s/…/exec?k=…" autocomplete="off"><div class="row" style="margin-top:8px"><button class="go" id="cloudConnect">Connecter</button></div></div>
+    <div id="cloudOn" hidden><div class="row" style="margin-top:8px"><button id="cloudSync">Synchroniser maintenant</button><button class="danger" id="cloudOff2">Déconnecter cet appareil</button></div></div>
+  </details>
+  <details class="set" id="setCoach"><summary>Coach IA (Claude)</summary>
+    <p class="status" id="coachState"></p>
+    <label>Clé API Anthropic</label><input id="coachKey" type="password" autocomplete="off" placeholder="sk-ant-…">
+    <div class="row" style="margin-top:8px"><button id="coachKeySave">Enregistrer la clé</button></div>
+    <p class="small muted">Envoyée une seule fois à ton script Google, jamais stockée dans l’app. Crée-la sur console.anthropic.com → API Keys.</p>
+    <label>Mes charges de référence</label><textarea id="coachRefs" rows="4"></textarea>
+    <label>Notes pour le coach</label><textarea id="coachNotes" rows="3"></textarea>
+  </details>
+  <details class="set"><summary>Sauvegarde et transfert du journal</summary>
+    <p class="small muted" id="backupState"></p>
+    <div class="row"><button id="exportFile">Exporter un fichier</button><button id="copyText">Copier en texte</button><button id="pickFile">Importer un fichier</button><input type="file" id="importFile" accept=".json,application/json,text/plain" hidden></div>
+    <label>Coller un ancien journal (texte)</label><textarea id="pasteBox" rows="3" placeholder="2026-11-17 / Séance A · Difficulté 7/10&#10;squat 3 × 8 à 87,5 kg"></textarea>
+    <div class="row" style="margin-top:8px"><button id="importText">Importer le texte collé</button></div>
+    <p class="status" id="syncMsg" role="status"></p>
+  </details>
+</section>
+</main>
+
+<div id="minibar"><b id="mbDig">0:00</b><span class="grow" id="mbLab"></span><button id="mbOpen">Ouvrir</button></div>
+
+<nav class="tabs" id="tabs">
+  <a href="#seance" data-t="seance"><svg viewBox="0 0 24 24" fill="none" stroke="#5d6f66" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9v6M21 9v6M6.5 12h11"/></svg>Séance</a>
+  <a href="#chrono" data-t="chrono"><svg viewBox="0 0 24 24" fill="none" stroke="#5d6f66" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>Chrono</a>
+  <a href="#repas" data-t="repas"><svg viewBox="0 0 24 24" fill="none" stroke="#5d6f66" stroke-width="2" stroke-linecap="round"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 3c-2 2-2 6 0 8v10"/></svg>Repas</a>
+  <a href="#suivi" data-t="suivi"><svg viewBox="0 0 24 24" fill="none" stroke="#5d6f66" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Suivi</a>
+</nav>
+
+<!-- Feuille « noter la séance » -->
+<div class="sheet" id="logSheet"><div>
+  <h2 id="logTitle">Noter la séance</h2>
+  <label class="small muted">Date</label><input id="logDay" type="date">
+  <label class="small muted" style="display:block;margin-top:8px">Type</label>
+  <select id="logType"><option>CrossFit</option><option>Muscu</option><option>Padel</option><option>Course</option><option>Autre</option></select>
+  <label class="small muted" style="display:block;margin-top:8px">Difficulté ressentie</label>
+  <div class="rate" id="rate"></div>
+  <label class="small muted">Ce que tu as fait (charges réelles, score du WOD…)</label>
+  <textarea id="logText" rows="6"></textarea>
+  <div class="row" style="margin-top:10px"><button class="go grow" id="logSave">Enregistrer</button><button id="logCancel">Annuler</button></div>
+  <p class="status" id="logMsg"></p>
+</div></div>
+
+<script src="core.js"></script>
+<script src="audio.js"></script>
+<script src="muscles.js"></script>
+<script src="timer.js"></script>
+<script src="sync.js"></script>
+<script src="templates.js"></script>
+<script src="seance.js"></script>
+<script src="repas.js"></script>
+<script src="suivi.js"></script>
+</body>
+</html>
