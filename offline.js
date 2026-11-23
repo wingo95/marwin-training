@@ -1,6 +1,6 @@
 // Cache d'abord (démarrage instantané même sans réseau à la salle), mise à jour en arrière-plan.
-const cacheName = 'marwin-offline-v3';
-const assets = ['./','./index.html','./app.js','./training.js','./moves.js','./focus.js','./intervals.js','./sync.js','./manifest.webmanifest','./icon.png'];
+const cacheName = 'marwin-offline-v4';
+const assets = ['./','./index.html','./app.js','./training.js','./moves.js','./focus.js','./intervals.js','./sync.js','./muscles.js','./coach.js','./manifest.webmanifest','./icon.png'];
 self.addEventListener('install', event => event.waitUntil((async () => {
   const cache = await caches.open(cacheName);
   await cache.addAll(assets);
