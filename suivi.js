@@ -109,6 +109,7 @@ $('coachKeySave').onclick = async () => {
   $('prepSec').onchange = () => setSetting('prep', Number($('prepSec').value));
   $('goalKcal').onchange = () => { const v = +$('goalKcal').value; if (v >= 1000 && v <= 5000) setSetting('kcal', v); };
   $('goalProt').onchange = () => { const v = +$('goalProt').value; if (v >= 40 && v <= 400) setSetting('prot', v); };
+  $('menuPrefs').value = st.menuPrefs || ''; $('menuPrefs').onchange = () => setSetting('menuPrefs', $('menuPrefs').value.trim().slice(0, 800));
   $('testSound').onclick = testSound;
 })();
 

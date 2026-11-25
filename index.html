@@ -63,6 +63,18 @@ nav.tabs a svg{width:24px;height:24px}nav.tabs a.on{color:var(--ink)}nav.tabs a.
 .meal{border-top:1px solid var(--line);padding:10px 0}.meal:first-child{border-top:0}.meal table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:6px}.meal td,.meal th{padding:3px 4px;text-align:right;border-bottom:1px solid #eef1ee}.meal td:first-child,.meal th:first-child{text-align:left}
 .ig{display:inline-block;border-radius:6px;padding:0 6px;font-size:.78rem;font-weight:700}.ig.bas{background:#dff3e4;color:#22663b}.ig.moyen{background:#fff1cc;color:#7a5a00}.ig.eleve{background:#fde1da;color:var(--warn)}
 .daynav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.daynav button{padding:6px 12px}
+/* Jeu nutrition */
+.game{display:flex;gap:12px;align-items:center;margin:4px 0 12px}.game b{font-size:1rem}
+.grade{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:12px;font-weight:900;font-size:1.25rem;color:#fff;line-height:1;margin-right:8px;flex:none}.grade small{font-size:.62rem;font-weight:700;opacity:.9;margin-top:2px}
+.grade.big{min-width:64px;height:64px;font-size:2rem;border-radius:18px}.grade.big small{font-size:.75rem}
+.gA{background:#1f8a4c}.gB{background:#6bb13d}.gC{background:#e0a419}.gD{background:#e8742c}.gE{background:#d23b2a}.gN{background:#b9c7bf}
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.pills span{background:#eef3f0;border-radius:999px;padding:2px 9px;font-size:.8rem;font-weight:650}.pills .pos{background:#dff3e4;color:#22663b}.pills .neg{background:#fde1da;color:var(--warn)}
+.verdict{margin:6px 0 0;font-weight:650}.thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;margin-right:8px;flex:none}
+.det summary{cursor:pointer;color:var(--muted);margin-top:6px}.meal.flash,.ex.flash{animation:fl 1.6s ease}@keyframes fl{0%{background:#e6fbd0}100%{background:transparent}}
+.photoprev{display:flex;align-items:flex-start;gap:8px;margin-top:10px}.photoprev img{width:120px;height:120px;object-fit:cover;border-radius:14px}
+.menuitem{border-top:1px solid var(--line);padding:10px 0}.menuitem ul{margin:6px 0;padding-left:18px;font-size:.9rem}.menuitem.done{opacity:.6}.menuitem button{padding:7px 12px}
+/* Notes et alternatives */
+.exnote{background:#fff8e1;border-radius:10px;padding:8px 10px;margin-top:8px;font-size:.9rem}.altbox{background:#eef3f0;border-radius:12px;padding:10px;margin-top:8px}.altbox textarea{margin-top:6px}.was{font-size:.8rem;color:var(--muted);margin-top:4px}
 /* Suivi */
 .entry{border-top:1px solid var(--line);padding:10px 0;white-space:pre-wrap;font-size:.92rem}.entry:first-child{border-top:0}.entry b{white-space:normal}
 table.stats{width:100%;border-collapse:collapse;font-size:.9rem}table.stats td,table.stats th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left}
@@ -115,16 +127,21 @@ details.set{background:#fff;border:1px solid var(--line);border-radius:14px;padd
 <section class="tab" id="t-repas">
   <div class="card">
     <div class="daynav"><button id="dPrev">◀</button><b id="dLabel"></b><button id="dNext">▶</button></div>
+    <div class="game" id="game"></div>
     <div class="totals" id="totals"></div>
   </div>
   <div class="card">
     <h2>Qu’as-tu mangé ?</h2>
     <div class="chips" id="mealType"><button class="chip" data-m="Petit-déjeuner">Petit-déj</button><button class="chip" data-m="Déjeuner">Déjeuner</button><button class="chip" data-m="Collation">Collation</button><button class="chip" data-m="Dîner">Dîner</button></div>
-    <textarea id="mealText" rows="3" style="margin-top:10px" placeholder="Ex. 3 œufs, 2 tranches de pain complet, 1 banane, café sans sucre"></textarea>
-    <button class="go" id="mealGo" style="width:100%;margin-top:10px">Calculer calories et index glycémique</button>
+    <button class="dark" id="photoBtn" style="width:100%;margin-top:10px;padding:14px">📷 Photo du plat</button>
+    <input type="file" id="photoIn" accept="image/*" hidden>
+    <div id="photoPrev" class="photoprev" hidden></div>
+    <textarea id="mealText" rows="2" style="margin-top:10px" placeholder="Ex. 3 œufs, 2 tranches de pain complet, 1 banane, café sans sucre"></textarea>
+    <button class="go" id="mealGo" style="width:100%;margin-top:10px">Calculer et noter le repas</button>
     <p class="status" id="mealMsg" role="status"></p>
   </div>
   <div class="card" id="mealList"></div>
+  <div class="card"><h2>Menu du jour</h2><div id="menuBox"></div><p class="status" id="menuMsg" role="status"></p></div>
 </section>
 
 <!-- ============ SUIVI ============ -->
@@ -146,6 +163,7 @@ details.set{background:#fff;border:1px solid var(--line);border-radius:14px;padd
   <details class="set"><summary>Objectifs nutrition</summary>
     <label>Calories par jour (kcal)</label><input id="goalKcal" type="number" inputmode="numeric">
     <label>Protéines par jour (g)</label><input id="goalProt" type="number" inputmode="numeric">
+    <label>Préférences pour les menus</label><textarea id="menuPrefs" rows="3" placeholder="Ex. pas de poisson le midi, budget serré, j’ai de la whey isolate (1 dose = 26 g de protéines)"></textarea>
   </details>
   <details class="set"><summary>Programme Prépa HYROX</summary>
     <p class="small muted" id="prepaState"></p>

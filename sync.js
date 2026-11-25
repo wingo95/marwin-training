@@ -16,9 +16,10 @@ function saveMeal(meal) {
   const all = meals();
   if (meal.deleted) delete all[meal.id]; else all[meal.id] = { ...meal, updated: Date.now() };
   write(MEALS, all);
-  queueOp(MQUEUE, meal.id, meal.deleted ? { id: meal.id, deleted: true, updated: Date.now() } : all[meal.id]);
+  queueOp(MQUEUE, meal.id, meal.deleted ? { id: meal.id, deleted: true, updated: Date.now() } : noThumb(all[meal.id]));
   emit('meals'); scheduleSync();
 }
+const noThumb = m => { const { thumb, ...rest } = m; return rest; };
 function queueOp(q, k, op) { if (!cloud()) return; const all = read(q, {}); all[k] = op; write(q, all); }
 const pendingCount = () => Object.keys(read(QUEUE, {})).length + Object.keys(read(MQUEUE, {})).length;
 
@@ -71,11 +72,11 @@ function applyMeals(remote, gone) {
   for (const r of remote || []) {
     known.add(r.id); if (q[r.id]) continue;
     const cur = all[r.id];
-    if (!cur || r.updated > (cur.updated || 0)) { all[r.id] = r; changed = true; }
+    if (!cur || r.updated > (cur.updated || 0)) { all[r.id] = cur && cur.thumb ? { ...r, thumb: cur.thumb } : r; changed = true; }
   }
   let missing = 0;
   const since = isoDay(new Date(Date.now() - 85 * 86400000));
-  for (const [id, m] of Object.entries(all)) if (!known.has(id) && !q[id] && m.date >= since) { q[id] = m; missing++; }
+  for (const [id, m] of Object.entries(all)) if (!known.has(id) && !q[id] && m.date >= since) { q[id] = noThumb(m); missing++; }
   if (missing) write(MQUEUE, q);
   if (changed) { write(MEALS, all); emit('meals'); }
   return missing;
